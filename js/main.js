@@ -146,34 +146,104 @@ function initSmoothScroll() {
 // Contact Form Handler
 function initContactForm() {
     const contactForm = document.getElementById('contact-form');
-    if (!contactForm) return;
+    if (!contactForm) {
+        console.log('Contact form not found');
+        return;
+    }
+    
+    console.log('Contact form found, adding event listener');
     
     contactForm.addEventListener('submit', function(event) {
+        console.log('Form submitted, preventing default');
         event.preventDefault();
+        event.stopPropagation();
         
         // Get form data
         const formData = new FormData(this);
         const name = formData.get('name');
         const email = formData.get('email');
+        const subject = formData.get('subject') || 'General Inquiry';
         const message = formData.get('message');
         
         // Basic validation
         if (!name || !email || !message) {
-            showToast('Please fill in all fields.', 'error');
+            showToast('Please fill in all required fields (Name, Email, and Message).', 'error');
             return;
         }
         
         if (!isValidEmail(email)) {
-            showToast('Please enter a valid email address.', 'error');
+            showToast('Please enter a valid email address format (example@domain.com).', 'error');
             return;
         }
         
-        // Simulate form submission
-        showToast('Thank you for your message! We will get back to you soon.', 'success');
+        // Check if EmailJS is loaded
+        if (typeof emailjs === 'undefined') {
+            showToast('Email service is not available. Please refresh the page and try again.', 'error');
+            return;
+        }
         
-        // Reset form
-        this.reset();
+        // Show loading state
+        const submitBtn = document.getElementById('submit-btn');
+        const btnText = submitBtn.querySelector('.btn-text');
+        const btnLoading = submitBtn.querySelector('.btn-loading');
+        
+        submitBtn.disabled = true;
+        btnText.style.display = 'none';
+        btnLoading.style.display = 'inline';
+        
+        // EmailJS template parameters
+        const templateParams = {
+            from_name: name,
+            from_email: email,
+            subject: subject,
+            message: message,
+            to_email: 'naldevelopment@gmail.com'
+        };
+        
+        // Send email using EmailJS
+        emailjs.send('service_4df2kqi', 'template_xphv0eu', templateParams)
+            .then(function(response) {
+                console.log('SUCCESS!', response.status, response.text);
+                showToast('Thank you for your message! We will get back to you soon.', 'success');
+                contactForm.reset();
+            }, function(error) {
+                console.log('FAILED...', error);
+                
+                // Get detailed error information
+                let errorMessage = 'Sorry, there was an error sending your message.';
+                let errorReason = '';
+                
+                if (error.text) {
+                    errorReason = error.text;
+                } else if (error.message) {
+                    errorReason = error.message;
+                } else if (error.status) {
+                    errorReason = `Status: ${error.status}`;
+                }
+                
+                if (errorReason) {
+                    errorMessage += ` Error: ${errorReason}`;
+                }
+                
+                showToast(errorMessage, 'error');
+            })
+            .finally(function() {
+                // Reset button state
+                submitBtn.disabled = false;
+                btnText.style.display = 'inline';
+                btnLoading.style.display = 'none';
+            });
     });
+    
+    // Also add click event to submit button as backup
+    const submitBtn = document.getElementById('submit-btn');
+    if (submitBtn) {
+        submitBtn.addEventListener('click', function(event) {
+            console.log('Submit button clicked');
+            event.preventDefault();
+            event.stopPropagation();
+        });
+    }
 }
 
 // Email Validation

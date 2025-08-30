@@ -94,7 +94,10 @@
                                 <textarea id="message" name="message" class="form-textarea" rows="6" required></textarea>
                             </div>
                             
-                            <button type="submit" class="btn btn--primary">Send Message</button>
+                            <button type="submit" class="btn btn--primary" id="submit-btn">
+                                <span class="btn-text">Send Message</span>
+                                <span class="btn-loading" style="display: none;">Sending...</span>
+                            </button>
                         </form>
                     </div>
                     
@@ -125,7 +128,7 @@
                                 </div>
                                 <div class="contact-item__content">
                                     <h3>Phone</h3>
-                                    <p><a href="tel:+9613626454">+961 3 626 454</a></p>
+                                    <p><a href="tel:+96170722142">+961 70722142</a></p>
                                 </div>
                             </div>
                             
@@ -138,7 +141,7 @@
                                 </div>
                                 <div class="contact-item__content">
                                     <h3>Location</h3>
-                                    <p>Lebanon</p>
+                                    <p><a href="https://maps.app.goo.gl/mATh5GKr9GdYKQm98" target="_blank" rel="noopener">View on Google Maps</a></p>
                                     <p>We serve communities across Lebanon</p>
                                 </div>
                             </div>
@@ -174,7 +177,7 @@
                 <p class="section__text section__text--center">We serve communities across Lebanon, working to empower local development and support youth initiatives.</p>
                 
                 <div class="map-container">
-                                            <img src="images/contact-placeholder.jpg" alt="Map showing NALD's service areas across Lebanon" width="800" height="400" loading="lazy">
+                    <img src="images/contact-placeholder.jpg" alt="Map showing NALD's service areas across Lebanon" width="800" height="400" loading="lazy">
                 </div>
             </div>
         </section>
@@ -246,18 +249,92 @@
                     </div>
                     <div class="footer__contact">
                         <p><a href="mailto:naldevelopment@gmail.com">naldevelopment@gmail.com</a></p>
-                        <p><a href="tel:+9613626454">+961 3 626 454</a></p>
+                        <p><a href="tel:+96170722142">+961 70722142</a></p>
                     </div>
                 </div>
             </div>
             
             <div class="footer__bottom">
-                <p>&copy; 2024 National Association for Local Development (NALD). All rights reserved.</p>
+                <p>&copy; 2025 National Association for Local Development (NALD). All rights reserved.</p>
             </div>
         </div>
     </footer>
 
     <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script>
+        (function() {
+            emailjs.init("dkdF97XZm29VGZOvQ"); // Your EmailJS public key
+        })();
+    </script>
     <script src="/js/main.js"></script>
+    
+    <!-- Direct form handler -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, setting up form handler');
+            
+            const form = document.getElementById('contact-form');
+            if (form) {
+                console.log('Form found, adding submit handler');
+                
+                form.addEventListener('submit', function(e) {
+                    console.log('Form submitted!');
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    // Get form data
+                    const formData = new FormData(this);
+                    const name = formData.get('name');
+                    const email = formData.get('email');
+                    const subject = formData.get('subject') || 'General Inquiry';
+                    const message = formData.get('message');
+                    
+                    console.log('Form data:', { name, email, subject, message });
+                    
+                    // Show loading state
+                    const submitBtn = document.getElementById('submit-btn');
+                    const btnText = submitBtn.querySelector('.btn-text');
+                    const btnLoading = submitBtn.querySelector('.btn-loading');
+                    
+                    submitBtn.disabled = true;
+                    btnText.style.display = 'none';
+                    btnLoading.style.display = 'inline';
+                    
+                    // EmailJS template parameters
+                    const templateParams = {
+                        from_name: name,
+                        from_email: email,
+                        subject: subject,
+                        message: message,
+                        to_email: 'naldevelopment@gmail.com'
+                    };
+                    
+                    console.log('Sending email with params:', templateParams);
+                    
+                    // Send email using EmailJS
+                    emailjs.send('service_4df2kqi', 'template_xphv0eu', templateParams)
+                        .then(function(response) {
+                            console.log('SUCCESS!', response.status, response.text);
+                            alert('Thank you for your message! We will get back to you soon.');
+                            form.reset();
+                        }, function(error) {
+                            console.log('FAILED...', error);
+                            alert('Sorry, there was an error sending your message. Please try again.');
+                        })
+                        .finally(function() {
+                            // Reset button state
+                            submitBtn.disabled = false;
+                            btnText.style.display = 'inline';
+                            btnLoading.style.display = 'none';
+                        });
+                    
+                    return false;
+                });
+            } else {
+                console.log('Form not found!');
+            }
+        });
+    </script>
 </body>
 </html>
