@@ -1,4 +1,5 @@
 /* CSS Custom Properties */
+
 :root {
   /* Colors */
   --brand: #2563eb;
@@ -47,10 +48,10 @@
   --transition-slow: all 0.3s ease-in-out;
 }
 
-/* Dark Mode Support - Force Light Mode */
+/* Dark Mode Support - Same Colors for Both Modes */
 @media (prefers-color-scheme: dark) {
   :root {
-    /* Override dark mode preferences to maintain our design */
+    /* Use the same colors for both light and dark modes */
     --text: #1f2937;
     --text-light: #6b7280;
     --text-lighter: #9ca3af;
