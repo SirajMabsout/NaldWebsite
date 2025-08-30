@@ -189,7 +189,7 @@ This project is created for the National Association for Local Development (NALD
 
 For questions or support:
 - Email: naldevelopment@gmail.com
-- Phone: +961 3 626 454
+- Phone: +961 03626454
 - Instagram: [@n_a_l_d_](https://www.instagram.com/n_a_l_d_?igsh=ZWY1MjZ6ZzRxajlr)
 - Facebook: [NALD](https://www.facebook.com/naldevelopment)
 
