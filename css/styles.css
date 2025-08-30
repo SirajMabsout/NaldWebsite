@@ -47,6 +47,20 @@
   --transition-slow: all 0.3s ease-in-out;
 }
 
+/* Dark Mode Support - Force Light Mode */
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Override dark mode preferences to maintain our design */
+    --text: #1f2937;
+    --text-light: #6b7280;
+    --text-lighter: #9ca3af;
+    --bg: #ffffff;
+    --bg-alt: #f9fafb;
+    --border: #e5e7eb;
+    --border-dark: #d1d5db;
+  }
+}
+
 /* Reset and Base Styles */
 *,
 *::before,
@@ -586,12 +600,27 @@ a:hover {
     opacity: 0;
     visibility: hidden;
     transition: var(--transition-slow);
+    z-index: 999;
+    border-top: 1px solid var(--border);
   }
   
   .nav__menu.active {
     transform: translateY(0);
     opacity: 1;
     visibility: visible;
+  }
+  
+  .nav__menu li {
+    width: 100%;
+    text-align: center;
+    margin: var(--space-sm) 0;
+  }
+  
+  .nav__menu .nav__link {
+    display: block;
+    padding: var(--space-md) var(--space-lg);
+    width: 100%;
+    border-radius: var(--radius-md);
   }
   
   .nav__toggle {
@@ -648,6 +677,29 @@ a:hover {
     gap: var(--space-xl);
   }
   
+  /* Volunteer Section Mobile */
+  .volunteer-section {
+    padding: var(--space-2xl) 0;
+  }
+  
+  .volunteer-content {
+    flex-direction: column;
+    gap: var(--space-xl);
+  }
+  
+  .volunteer-text {
+    text-align: center;
+  }
+  
+  .volunteer-action {
+    text-align: center;
+  }
+  
+  .volunteer-action .btn {
+    width: 100%;
+    max-width: 300px;
+  }
+  
   .affiliates-list {
     gap: var(--space-xl);
   }
@@ -679,6 +731,21 @@ a:hover {
     min-height: 60vh;
   }
   
+  .hero__content {
+    transform: translateY(-40%);
+    padding: 0 var(--space-md);
+  }
+  
+  .hero__title {
+    font-size: 2rem;
+    margin-bottom: var(--space-md);
+  }
+  
+  .hero__subtitle {
+    font-size: 1rem;
+    margin-bottom: var(--space-xl);
+  }
+  
   .program-card,
   .affiliate-item {
     padding: var(--space-xl);
@@ -698,6 +765,61 @@ a:hover {
   
   .social-links__grid {
     flex-direction: column;
+  }
+  
+  /* Mobile-specific improvements */
+  .page-header {
+    padding: var(--space-2xl) 0;
+  }
+  
+  .page-header__title {
+    font-size: 2rem;
+  }
+  
+  .page-header__subtitle {
+    font-size: 1rem;
+  }
+  
+  .coming-soon h3 {
+    font-size: 2rem;
+  }
+  
+  .volunteer-content {
+    padding: 0 var(--space-md);
+  }
+  
+  .volunteer-text h2 {
+    font-size: 1.75rem;
+  }
+  
+  .volunteer-text p {
+    font-size: 1rem;
+  }
+  
+  .volunteer-action .btn {
+    width: 100%;
+    max-width: none;
+    font-size: 1rem;
+    padding: var(--space-md) var(--space-xl);
+  }
+  
+  /* Improve form elements on mobile */
+  .form-input,
+  .form-textarea {
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+  
+  /* Better touch targets */
+  .btn {
+    min-height: 48px;
+    min-width: 48px;
+  }
+  
+  .nav__link {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 
@@ -1219,6 +1341,74 @@ a:hover {
   font-style: italic;
 }
 
+/* Coming Soon Section */
+.coming-soon {
+  text-align: center;
+  padding: var(--space-3xl) 0;
+}
+
+.coming-soon h3 {
+  font-size: 2.5rem;
+  color: var(--brand);
+  margin-bottom: 0;
+}
+
+/* Volunteer Section */
+.volunteer-section {
+  background: var(--bg-alt);
+  padding: var(--space-3xl) 0;
+}
+
+.volunteer-content {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3xl);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.volunteer-text {
+  flex: 1;
+}
+
+.volunteer-text h2 {
+  color: var(--text);
+  margin-bottom: var(--space-lg);
+}
+
+.volunteer-text p {
+  color: var(--text-light);
+  margin-bottom: var(--space-lg);
+  font-size: 1.125rem;
+}
+
+.volunteer-action {
+  flex-shrink: 0;
+}
+
+.volunteer-action .btn {
+  font-size: 1.125rem;
+  padding: var(--space-lg) var(--space-2xl);
+  min-width: 200px;
+}
+
+.loading-dots {
+  animation: loadingDots 1.5s infinite;
+  display: inline-block;
+}
+
+@keyframes loadingDots {
+  0%, 20% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
 /* Button Loading State */
 .btn:disabled {
   opacity: 0.7;
@@ -1279,5 +1469,58 @@ a:hover {
   
   .hero__subtitle {
     color: var(--text-light);
+  }
+}
+
+/* Additional Mobile Improvements */
+@media (max-width: 768px) {
+  /* Prevent horizontal scroll */
+  body {
+    overflow-x: hidden;
+  }
+  
+  /* Better spacing for mobile */
+  .section {
+    padding: var(--space-2xl) 0;
+  }
+  
+  /* Improve button touch targets */
+  .btn {
+    padding: var(--space-md) var(--space-lg);
+    font-size: 1rem;
+  }
+  
+  /* Better form handling on mobile */
+  input, textarea, select {
+    font-size: 16px !important;
+  }
+  
+  /* Improve card layouts */
+  .program-card,
+  .value-card,
+  .affiliate-card {
+    margin-bottom: var(--space-lg);
+  }
+  
+  /* Better grid layouts */
+  .programs-grid,
+  .values-grid,
+  .affiliates-grid {
+    gap: var(--space-lg);
+  }
+}
+
+/* Landscape mobile improvements */
+@media (max-width: 768px) and (orientation: landscape) {
+  .hero {
+    min-height: 50vh;
+  }
+  
+  .hero__content {
+    transform: translateY(-20%);
+  }
+  
+  .section {
+    padding: var(--space-xl) 0;
   }
 }
